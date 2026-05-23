@@ -13,6 +13,35 @@ class AgentSkill(BaseModel):
     default_values: Dict[str, Any] = Field(description="Fallbacks for non-mandatory missing inputs")
     interaction_rules: List[str] = Field(description="Guidelines for how to prompt the user via CLI")
 
+# Definition for the Requirements Parser
+REQUIREMENTS_PARSER_SKILLS = AgentSkill( # This is the correct one to modify
+    agent_name="Requirements Parser",
+    naming_conventions={},
+    coding_standards=[
+        "Extract objective technical constraints",
+        "Identify explicit service names and domain boundaries",
+        "Expect structured markdown input following predefined sections (e.g., Service Name, Endpoints, Infrastructure)",
+        "Prioritize explicit declarations over inferred values"
+    ],
+    mandatory_security=[
+        "Identify any mentioned compliance requirements (PII, HIPAA, etc.)"
+    ],
+    required_inputs=[],
+    default_values={},
+    interaction_rules=[
+        "If the markdown is empty or unreadable, ask the user to provide a valid path."
+    ],
+    output_schema={
+        "service_name": "str",
+        "api_type": "str (REST/GraphQL/gRPC)",
+        "description": "str",
+        "endpoints": "List[Dict[str, str]]",
+        "infrastructure_requirements": "List[str]",
+        "dependencies": "List[str]"
+    },
+    approved_templates=[]
+)
+
 # Example Definition for the Scaffolding Engine
 SCAFFOLD_SKILLS = AgentSkill(
     agent_name="Scaffolding Engine",
@@ -82,59 +111,4 @@ TERRAFORM_SKILLS = AgentSkill(
         "audit_log": "str"
     },
     approved_templates=["templates/terraform/aws_s3.j2"]
-)
-
-# Definition for the PR Explainer Agent
-PR_EXPLAINER_SKILLS = AgentSkill(
-    agent_name="PR Explainer",
-    naming_conventions={},
-    coding_standards=[
-        "Generate clear, concise technical summaries",
-        "Use Markdown tables for decision transparency",
-        "Highlight security implications and assumptions"
-    ],
-    mandatory_security=[
-        "Must prominently flag any known vulnerabilities or IAM overrides",
-        "Identify sensitive resources created (e.g., S3, Databases)"
-    ],
-    required_inputs=["decisions", "files_generated"],
-    default_values={},
-    interaction_rules=[
-        "Ask for a custom PR prefix (e.g., JIRA-123) if not found in requirements."
-    ],
-    output_schema={
-        "pr_title": "str",
-        "pr_description_markdown": "str",
-        "review_priority": "str (High/Medium/Low)",
-        "labels": "List[str]"
-    },
-    approved_templates=[]
-)
-
-# Definition for the Git Manager Agent
-VCS_SKILLS = AgentSkill(
-    agent_name="Git Manager",
-    naming_conventions={
-        "branches": "feature/scaffold-*"
-    },
-    coding_standards=[
-        "Ensure a .gitignore is present",
-        "Create a clean initial commit",
-        "Follow standard branch naming conventions"
-    ],
-    mandatory_security=[
-        "Validate that no secrets are in the staging area"
-    ],
-    required_inputs=["remote_url"],
-    default_values={"branch_name": "main"},
-    interaction_rules=[
-        "If .git is missing, ask: 'Initialize new Git repository in this folder?'",
-        "Prompt for the Remote Origin URL to support PR generation."
-    ],
-    output_schema={
-        "repo_initialized": "bool",
-        "remote_set": "bool",
-        "current_branch": "str"
-    },
-    approved_templates=[]
 )

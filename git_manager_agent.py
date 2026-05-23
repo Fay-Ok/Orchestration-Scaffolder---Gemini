@@ -37,7 +37,8 @@ class GitManagerAgent(BaseAgent):
         return {
             "repo_initialized": True,
             "remote_set": True if remote_url else False,
-            "current_branch": branch
+            "current_branch": branch,
+            "decisions": self.decisions
         }
 
     def _run_git(self, args: list, cwd: str):

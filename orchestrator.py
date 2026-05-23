@@ -5,7 +5,11 @@ from core.agents.base_agent import BaseAgent
 from core.agents.requirements_parser_agent import RequirementsParserAgent
 from core.agents.pr_explainer_agent import PRExplainerAgent
 from core.agents.git_manager_agent import GitManagerAgent
-from core.agent_skills import REQUIREMENTS_PARSER_SKILLS, PR_EXPLAINER_SKILLS, VCS_SKILLS
+from core.agents.scaffolding_engine_agent import ScaffoldingEngineAgent
+from core.agents.validation_agent import ValidationAgent
+from core.agent_skills import (
+    REQUIREMENTS_PARSER_SKILLS, PR_EXPLAINER_SKILLS, VCS_SKILLS, SCAFFOLD_SKILLS, VALIDATION_SKILLS
+)
 from core.llm_client import GeminiClient
 
 class Orchestrator:
@@ -20,6 +24,8 @@ class Orchestrator:
         self.agents = [
             RequirementsParserAgent(REQUIREMENTS_PARSER_SKILLS, self.llm_client),
             GitManagerAgent(VCS_SKILLS),
+            ScaffoldingEngineAgent(SCAFFOLD_SKILLS, self.llm_client),
+            ValidationAgent(VALIDATION_SKILLS),
             PRExplainerAgent(PR_EXPLAINER_SKILLS, self.llm_client)
         ]
 

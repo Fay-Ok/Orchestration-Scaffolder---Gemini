@@ -56,7 +56,17 @@ The system utilizes a series of agents, each equipped with specific engineering 
 
 ## Getting Started
 
-*(Instructions on how to run the orchestrator will be added here as development progresses.)*
+1. **Setup Environment:**
+   Create a `.env` file in the root directory and add your Google Gemini API key:
+   ```text
+   GOOGLE_API_KEY=your_actual_key_here
+   ```
+
+2. **Run the Orchestrator:**
+   Provide the path to the sample requirements file and a target output directory:
+   ```bash
+   python main.py sample_requirements.md --output ./TestPaymentService
+   ```
 
 ---
 *Built with Gemini Code Assist.*
