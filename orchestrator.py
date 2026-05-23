@@ -2,11 +2,11 @@ from pathlib import Path
 from typing import Dict, Any
 from core.agents.base_agent import BaseAgent
 # Import specific agents here as we build them
-from core.agents.requirements_parser_agent import RequirementsParserAgent
+from requirements_parser_agent import RequirementsParserAgent
 from core.agents.pr_explainer_agent import PRExplainerAgent
-from core.agents.git_manager_agent import GitManagerAgent
-from core.agents.scaffolding_engine_agent import ScaffoldingEngineAgent
-from core.agents.validation_agent import ValidationAgent
+from git_manager_agent import GitManagerAgent
+from scaffolding_engine_agent import ScaffoldingEngineAgent
+from validation_agent import ValidationAgent
 from core.agent_skills import (
     REQUIREMENTS_PARSER_SKILLS, PR_EXPLAINER_SKILLS, VCS_SKILLS, SCAFFOLD_SKILLS, VALIDATION_SKILLS
 )
@@ -44,6 +44,12 @@ class Orchestrator:
             
             # Step B: LLM Generation
             result = agent.execute(self.global_context)
+            
+            # Accumulate decisions for the PR Explainer
+            if "decisions" not in self.global_context:
+                self.global_context["decisions"] = []
+            self.global_context["decisions"].extend(agent.decisions)
+            
             self.global_context.update(result)
 
         print("\n--- Orchestration Complete ---")

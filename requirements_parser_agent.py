@@ -1,6 +1,6 @@
 from typing import Dict, Any
-from base_agent import BaseAgent
-from agent_skills import AgentSkill
+from core.agents.base_agent import BaseAgent
+from core.agent_skills import AgentSkill
 from llm_client import GeminiClient
 
 class RequirementsParserAgent(BaseAgent):

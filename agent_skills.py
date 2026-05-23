@@ -21,7 +21,8 @@ REQUIREMENTS_PARSER_SKILLS = AgentSkill( # This is the correct one to modify
         "Extract objective technical constraints",
         "Identify explicit service names and domain boundaries",
         "Expect structured markdown input following predefined sections (e.g., Service Name, Endpoints, Infrastructure)",
-        "Prioritize explicit declarations over inferred values"
+        "Prioritize explicit declarations over inferred values",
+        "Identify minimum .NET SDK version requirements if specified"
     ],
     mandatory_security=[
         "Identify any mentioned compliance requirements (PII, HIPAA, etc.)"
@@ -37,7 +38,8 @@ REQUIREMENTS_PARSER_SKILLS = AgentSkill( # This is the correct one to modify
         "description": "str",
         "endpoints": "List[Dict[str, str]]",
         "infrastructure_requirements": "List[str]",
-        "dependencies": "List[str]"
+        "dependencies": "List[str]",
+        "min_sdk_version": "str"
     },
     approved_templates=[]
 )

@@ -1,10 +1,10 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 from core.agent_skills import AgentSkill
 
 class BaseAgent:
     def __init__(self, skill: AgentSkill):
         self.skill = skill
-        self.context: Dict[str, Any] = {}
+        self.decisions: List[Dict[str, Any]] = []
 
     def validate_and_clarify(self, current_context: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -42,6 +42,4 @@ class BaseAgent:
         Helper to track decisions for the PR Explainer.
         Source should be 'user', 'default', or 'requirement_spec'.
         """
-        if "decisions" not in self.context:
-            self.context["decisions"] = []
-        self.context["decisions"].append({"param": parameter, "val": value, "src": source})
+        self.decisions.append({"param": parameter, "val": value, "src": source})
